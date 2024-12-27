@@ -9,6 +9,7 @@ import { fileURLToPath } from "url";
 import { connectToDB } from "./lib/db.js";
 
 import authRoutes from "./routes/authRoutes.js";
+import messageRoutes from "./routes/messageRoutes.js";
 
 dotenv.config();
 
@@ -33,6 +34,7 @@ app.use("/uploads", express.static(uploadDir));
 
 // routes
 app.use("/api/auth", authRoutes);
+app.use("/api/message", messageRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is up and running on port ${PORT}`);
