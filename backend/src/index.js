@@ -1,5 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 import { connectToDB } from "./lib/db.js";
 
@@ -11,6 +16,20 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json()); // allows to extract json data out of incoming req body
+app.use(cookieParser());
+
+const __filename = fileURLToPath(import.meta.url); // locate this file
+const __dirname = path.dirname(__filename); // locate the directory of this file
+
+// ensure the /uploads/profile-pics directory exists (to be created at deployment)
+const uploadDir = path.join(__dirname, "../uploads/profile-pics");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+  console.log(`Directory created at ${uploadDir}`);
+}
+
+// middleware to serve static files from the /uploads folder to the user
+app.use("/uploads", express.static(uploadDir));
 
 // routes
 app.use("/api/auth", authRoutes);
