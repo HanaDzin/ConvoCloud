@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 import fs from "fs";
 import path from "path";
@@ -18,6 +19,12 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json()); // allows to extract json data out of incoming req body
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 const __filename = fileURLToPath(import.meta.url); // locate this file
 const __dirname = path.dirname(__filename); // locate the directory of this file

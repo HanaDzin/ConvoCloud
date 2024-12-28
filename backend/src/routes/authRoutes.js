@@ -5,6 +5,7 @@ import {
   logout,
   signup,
   updateProfilePic,
+  checkAuth,
 } from "../controllers/authController.js";
 import { protectRoute } from "../middleware/authMiddleware.js";
 
@@ -17,6 +18,13 @@ authRoutes.post("/login", login);
 authRoutes.post("/logout", logout);
 
 // this route is protected so only a logged-in user can reach it
-authRoutes.put("/update-profile-pic", protectRoute, upload.single('profilePic'), updateProfilePic);
+authRoutes.put(
+  "/update-profile-pic",
+  protectRoute,
+  upload.single("profilePic"),
+  updateProfilePic
+);
+
+authRoutes.get("/check", protectRoute, checkAuth);
 
 export default authRoutes;
