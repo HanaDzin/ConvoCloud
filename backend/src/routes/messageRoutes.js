@@ -12,6 +12,6 @@ messageRouter.get("/users", protectRoute, getUsersForSidebar);
 
 messageRouter.get("/:receiverId", protectRoute, getMessages);
 
-messageRouter.post("send/:receiverId", protectRoute, sendMessage);
+messageRouter.post("/send/:receiverId", protectRoute, sendMessage);
 
 export default messageRouter;
