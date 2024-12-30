@@ -1,12 +1,15 @@
 import multer from "multer";
-
+import path from "path";
 // configure where and how the files are stored
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/profile-pics"); // stored in this directory
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`); // under the name constructed from the date + original name
+    cb(
+      null,
+      `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`
+    ); // under the name constructed from the date + original name
   },
 });
 

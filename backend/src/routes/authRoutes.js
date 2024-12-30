@@ -19,10 +19,9 @@ authRoutes.post("/logout", logout);
 
 // this route is protected so only a logged-in user can reach it
 authRoutes.put(
-  "/update-profile-pic",
-  protectRoute,
-  upload.single("profilePic"),
-  updateProfilePic
+  "/update-profile-pic", protectRoute,
+  upload.single("profilePic"), updateProfilePic
+  
 );
 
 authRoutes.get("/check", protectRoute, checkAuth);

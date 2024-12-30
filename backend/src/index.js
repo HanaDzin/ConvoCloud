@@ -26,18 +26,9 @@ app.use(
   })
 );
 
-const __filename = fileURLToPath(import.meta.url); // locate this file
-const __dirname = path.dirname(__filename); // locate the directory of this file
-
-// ensure the /uploads/profile-pics directory exists (to be created at deployment)
-const uploadDir = path.join(__dirname, "../uploads/profile-pics");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-  console.log(`Directory created at ${uploadDir}`);
-}
-
+const __dirname = path.resolve();
 // middleware to serve static files from the /uploads folder to the user
-app.use("/uploads", express.static(uploadDir));
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 // routes
 app.use("/api/auth", authRoutes);

@@ -107,7 +107,7 @@ export const updateProfilePic = async (req, res) => {
       return res.status(400).json({ message: "Profile picture is required" });
     }
 
-    const filePath = `/uploads/profile-pics/${req.file.filename}`;
+    const filePath = `http://localhost:5001/uploads/profile-pics/${req.file.filename}`;
 
     // Update user's profile picture in the database
     const updatedUser = await User.findByIdAndUpdate(
@@ -118,7 +118,7 @@ export const updateProfilePic = async (req, res) => {
 
     res.status(200).json(updatedUser);
   } catch (error) {
-    console.error("Error in update profile:", error);
+    console.error("Error in update profile controller:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
