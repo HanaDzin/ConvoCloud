@@ -38,17 +38,22 @@ export const getMessages = async (req, res) => {
 
 export const sendMessage = async (req, res) => {
   try {
-    const { text, image } = req.body;
+    const { text } = req.body;
     const { receiverId } = req.params;
     const senderId = req.user._id;
 
-    // ADD LOGIC TO SEND A PICTURE
+    const imagePath = req.file
+      ? `${req.protocol}://${req.get("host")}/uploads/attachments/${
+          req.file.filename
+        }`
+      : null;
 
     // create the new message
     const newMessage = new Message({
       senderId,
       receiverId,
       text,
+      image: imagePath,
     });
 
     await newMessage.save();

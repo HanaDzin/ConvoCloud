@@ -3,7 +3,11 @@ import path from "path";
 // configure where and how the files are stored
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/profile-pics"); // stored in this directory
+    if (req.route.path.includes("send")) {
+      cb(null, "uploads/attachments");
+    } else {
+      cb(null, "uploads/profile-pics");
+    }
   },
   filename: (req, file, cb) => {
     cb(

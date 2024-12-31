@@ -35,9 +35,11 @@ const MessageInput = () => {
     if (!text.trim() && !imagePreview) return;
 
     try {
+      const file = fileInputRef.current.files[0];
+
       await sendMessage({
         text: text.trim(),
-        image: imagePreview,
+        image: file,
       });
 
       // clear form
