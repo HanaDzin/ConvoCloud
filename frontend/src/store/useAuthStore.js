@@ -86,10 +86,19 @@ export const useAuthStore = create((set, get) => ({
     const { authUser } = get();
     if (!authUser || get().socket?.connected) return; //don't continue if user is not authenticated or is already connected
 
-    const socket = io(BASE_URL);
+    const socket = io(BASE_URL, {
+      query: {
+        userId: authUser._id, // when connecting, pass the user's id to be used when storing onlineUsers
+      },
+    });
     socket.connect();
 
     set({ socket: socket });
+
+    // listen for onlineUsers updates (via the getOnlineUsers event emitted from the socket.js)
+    socket.on("getOnlineUsers", (userIds) => {
+      set({ onlineUsers: userIds }); // update the state to match the one captured from the backend on every connect/disconnect
+    });
   },
   disconnectSocket: () => {
     if (get().socket?.connected) get().socket.disconnect();

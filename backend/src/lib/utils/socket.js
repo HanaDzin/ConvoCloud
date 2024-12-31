@@ -13,12 +13,24 @@ const io = new Server(server, {
   },
 });
 
+// keep track of online users - key-value: userId-socketId
+const userSocketMap = {};
+
 // set up listening for any incoming connections
 io.on("connection", (socket) => {
   console.log("A user connected ", socket.id); // every time someone connects, they are assigned a socket
 
+  const userId = socket.handshake.query.userId; // userId passed from connectSocket when creating a new socket
+  if (userId) {
+    userSocketMap[userId] = socket.id; // update the userSocket map to make this user appear online
+  }
+  // emitting an event to ALL connected users to let them know this user is online
+  io.emit("getOnlineUsers", Object.keys(userSocketMap));
+
   socket.on("disconnect", () => {
-    console.log("A user disconnected: ", socket.id); // listen for disconnection of the socket
+    console.log("A user disconnected ", socket.id); // listen for disconnection of the socket
+    delete userSocketMap[userId]; // update the online users map
+    io.emit("getOnlineUsers", Object.keys(userSocketMap)); // broadcast to all users to reflect the changes
   });
 });
 
