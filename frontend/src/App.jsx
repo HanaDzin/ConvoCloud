@@ -18,7 +18,7 @@ export default function App() {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
   const { theme } = useThemeStore();
 
-  // to check the authenticated user as soon as the app starts
+  // to check the authenticated user as soon as the app starts (whenever you visit the app, check if authorized)
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
