@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from "path";
+import fs from "fs";
 
 import { connectToDB } from "./lib/db.js";
 
@@ -14,6 +15,19 @@ import { app, server } from "./lib/utils/socket.js";
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
+
+// function to create directories if they don't exist to ensure image uploads
+const createDirectories = () => {
+  const dirs = ["uploads/attachments", "uploads/profile-pics"];
+
+  dirs.forEach((dir) => {
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+  });
+};
+
+createDirectories();
 
 app.use(express.json()); // allows to extract json data out of incoming req body
 app.use(cookieParser());
