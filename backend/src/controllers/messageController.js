@@ -48,7 +48,9 @@ export const sendMessage = async (req, res) => {
         ? process.env.BASE_URL
         : `${req.protocol}://${req.get("host")}`;
 
-    const imagePath = `${baseURL}/uploads/attachments/${req.file.filename}`;
+    const imagePath = req.file
+      ? `${baseURL}/uploads/attachments/${req.file.filename}`
+      : null;
 
     // create the new message
     const newMessage = new Message({
