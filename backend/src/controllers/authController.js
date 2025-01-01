@@ -107,9 +107,12 @@ export const updateProfilePic = async (req, res) => {
       return res.status(400).json({ message: "Profile picture is required" });
     }
 
-    const filePath = `${req.protocol}://${req.get(
-      "host"
-    )}/uploads/profile-pics/${req.file.filename}`;
+    const baseURL =
+      process.env.NODE_ENV === "production"
+        ? process.env.BASE_URL
+        : `${req.protocol}://${req.get("host")}`;
+
+    const filePath = `${baseURL}/uploads/profile-pics/${req.file.filename}`;
 
     // Update user's profile picture in the database
     const updatedUser = await User.findByIdAndUpdate(

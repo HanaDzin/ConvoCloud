@@ -43,11 +43,12 @@ export const sendMessage = async (req, res) => {
     const { receiverId } = req.params;
     const senderId = req.user._id;
 
-    const imagePath = req.file
-      ? `${req.protocol}://${req.get("host")}/uploads/attachments/${
-          req.file.filename
-        }`
-      : null;
+    const baseURL =
+      process.env.NODE_ENV === "production"
+        ? process.env.BASE_URL
+        : `${req.protocol}://${req.get("host")}`;
+
+    const imagePath = `${baseURL}/uploads/attachments/${req.file.filename}`;
 
     // create the new message
     const newMessage = new Message({
