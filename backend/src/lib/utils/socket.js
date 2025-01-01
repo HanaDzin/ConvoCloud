@@ -13,6 +13,11 @@ const io = new Server(server, {
   },
 });
 
+// helper function to find a user's socketId
+export function getReceiverSocketId(userId) {
+  return userSocketMap[userId];
+}
+
 // keep track of online users - key-value: userId-socketId
 const userSocketMap = {};
 

@@ -1,5 +1,6 @@
 import User from "../models/userModel.js";
 import Message from "../models/messageModel.js";
+import { getReceiverSocketId, io } from "../lib/utils/socket.js";
 
 // fetch all users from the database, excluding the currently logged in, to show in the sidebar
 export const getUsersForSidebar = async (req, res) => {
@@ -58,7 +59,11 @@ export const sendMessage = async (req, res) => {
 
     await newMessage.save();
 
-    // REAL-TIME FUNCTIONALITY - SOCKET.IO
+    // once the message is saved to the db, send it to the receiver in real time (using socket.io)
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
 
     res.status(201).json(newMessage);
   } catch (error) {

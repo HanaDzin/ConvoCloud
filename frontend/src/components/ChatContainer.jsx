@@ -9,14 +9,30 @@ import { useAuthStore } from "../store/useAuthStore";
 import { formatMessageTime } from "../../../backend/src/lib/utils/formatMessageTime";
 
 const ChatContainer = () => {
-  const { messages, getMessages, isMessagesLoading, selectedUser } =
-    useChatStore();
+  const {
+    messages,
+    getMessages,
+    isMessagesLoading,
+    selectedUser,
+    listenForMessages,
+    stopListeningForMessages,
+  } = useChatStore();
+
   const { authUser } = useAuthStore();
-  const messageEndRef = useRef(null);
+
+  const messageEndRef = useRef(null); // to automatically scroll down to the latest message
 
   useEffect(() => {
     getMessages(selectedUser._id);
-  }, [selectedUser._id, getMessages]);
+    listenForMessages();
+
+    return () => stopListeningForMessages();
+  }, [
+    selectedUser._id,
+    getMessages,
+    listenForMessages,
+    stopListeningForMessages,
+  ]);
 
   useEffect(() => {
     if (messageEndRef.current && messages) {
@@ -64,7 +80,14 @@ const ChatContainer = () => {
                 {formatMessageTime(message.createdAt)}
               </time>
             </div>
-            <div className="chat-bubble flex flex-col">
+            <div
+              className={`chat-bubble flex flex-col>
+              ${
+                message.senderId === authUser._id
+                  ? "bg-primary text-primary-content"
+                  : "bg-base-200"
+              }`}
+            >
               {message.image && (
                 <img
                   src={message.image}
